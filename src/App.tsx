@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Spinner, DefaultButton } from "@fluentui/react";
+import { Spinner, DefaultButton, SpinnerSize } from "@fluentui/react";
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
@@ -53,7 +53,14 @@ function App() {
 
   return (
     <div className="App">
-      {loading && <Spinner></Spinner>}
+      {loading && (
+        <Spinner
+          size={SpinnerSize.large}
+          label="Creating a never before seen image..."
+          ariaLive="assertive"
+          labelPosition="right"
+        ></Spinner>
+      )}
       {imageURL && !loading && <img src={imageURL} className="image" alt="generated content" />}
       <div className="input">
         <label htmlFor="subjectImage">What would you like your picture to be of?</label>
