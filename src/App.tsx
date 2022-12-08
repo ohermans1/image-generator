@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
+import { useState } from "react";
+import "./App.scss";
 import { Spinner, DefaultButton, SpinnerSize } from "@fluentui/react";
-const { Configuration, OpenAIApi } = require("openai");
+import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
 function App() {
   const [loading, setLoading] = useState(false);
 
-  const [imageURL, setImageURL] = useState(null);
-  const [subject, setSubject] = useState(null);
-  const [background, setbackground] = useState(null);
-  const [style, setstyle] = useState(null);
+  const [imageURL, setImageURL] = useState("");
+  const [subject, setSubject] = useState("");
+  const [background, setbackground] = useState("");
+  const [style, setstyle] = useState("");
 
   const saveClicked = async (e: any) => {
     e.preventDefault();
@@ -43,12 +43,21 @@ function App() {
   };
 
   const createImage = async (searchQuery: string) => {
-    const response = await openai.createImage({
-      prompt: searchQuery,
-      n: 1,
-      size: "1024x1024",
-    });
-    setImageURL(response.data.data[0].url);
+    try {
+      const response = await openai.createImage({
+        prompt: searchQuery,
+        n: 1,
+        size: "1024x1024",
+      });
+      setImageURL(response.data.data[0].url as string);
+    } catch (error: any) {
+      if (error.response) {
+        console.log(error.response.status);
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+      }
+    }
   };
 
   return (
@@ -90,7 +99,7 @@ function App() {
         ></input>
       </div>
       <DefaultButton onClick={saveClicked} disabled={loading}>
-        Save
+        Generate!
       </DefaultButton>
     </div>
   );
