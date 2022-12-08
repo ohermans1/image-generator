@@ -1,6 +1,6 @@
 {
   "name": "image-generator",
-  "homepage": "https://ohermans1.github.io/image-generator",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
